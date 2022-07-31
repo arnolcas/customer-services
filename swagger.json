@@ -1,0 +1,266 @@
+{
+    "definition": {
+        "openapi": "3.0.0",
+        "host": "localhost:3000",
+        "info": {
+            "title": "Customer Services API",
+            "description": "Api for our customers will be able to create service orders will be assigned to a one technician",
+            "version": "0.0.1"
+        },
+        "server": {
+            "url": "http://localhost/docs"
+        },
+        "tags": [
+            "Authentication",
+            "Orders",
+            "Customers",
+            "Technicians",
+            "Services"
+        ],
+        "paths": {
+            "/api/v1/auth/customer": {
+                "post": {
+                    "summary": "Login for customers",
+                    "tags": ["Authentication"],
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/UserAuth"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "User authenticated"
+                        }
+                    }
+                }
+            },
+            "/api/v1/auth/technician": {
+                "post": {
+                    "summary": "Login for technicians",
+                    "tags": ["Authentication"],
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/UserAuth"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "User authenticated"
+                        }
+                    }
+                }
+            },
+            "/api/v1/technician": {
+                "post": {
+                    "summary": "Register a technician",
+                    "tags": ["Technicians"],
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Technician"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "201": {
+                            "description": "Techinician created"
+                        }
+                    }
+                }
+            },
+            "/api/v1/customer": {
+                "post": {
+                    "summary": "Register a customer",
+                    "tags": ["Customers"],
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Customer"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "201": {
+                            "description": "Customer created"
+                        }
+                    }
+                }
+            },
+            "/api/v1/service": {
+                "post": {
+                    "summary": "Register a service",
+                    "tags": ["Services"],
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Service"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "201": {
+                            "description": "Services created"
+                        }
+                    }
+                }
+            },
+            "/api/v1/order": {
+                "post": {
+                    "summary": "Create and service assign an Order",
+                    "tags": ["Orders"],
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "201": {
+                            "description": "Order created by customer logged in"
+                        }
+                    },
+                    "security": [
+                        {
+                            "$ref": "#/components/securitySchemes/ApiKeyAuth"
+                        }
+                    ]
+                },
+                "get": {
+                    "summary": "Create and service assign an Order",
+                    "tags": ["Orders"],
+                    "responses": {
+                        "200": {
+                            "description": "List of order assigned to technician logged in"
+                        }
+                    },
+                    "security": [
+                        {
+                            "$ref": "#/components/securitySchemes/ApiKeyAuth"
+                        }
+                    ]
+                }
+            }
+        },
+        "components": {
+            "securitySchemes": {
+                "ApiKeyAuth": {
+                    "type": "apiKey",
+                    "name": "x-token",
+                    "in": "header"
+                }
+            },
+            "schemas": {
+                "UserAuth": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "string",
+                            "desccription": "User email to authentication"
+                        }
+                    },
+                    "required": ["email"],
+                    "example": {
+                        "email": "user@exameple.com"
+                    }
+                },
+                "Customer": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "desccription": "User name"
+                        },
+                        "email": {
+                            "type": "string",
+                            "desccription": "User email for authentication"
+                        }
+                    },
+                    "required": ["name", "email"],
+                    "example": {
+                        "name": "Jhon Doe",
+                        "email": "user@exameple.com"
+                    }
+                },
+                "Technician": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "desccription": "User name"
+                        },
+                        "email": {
+                            "type": "string",
+                            "desccription": "User email for authentication"
+                        }
+                    },
+                    "required": ["name", "email"],
+                    "example": {
+                        "name": "Jhon Doe",
+                        "email": "user@exameple.com"
+                    }
+                },
+                "Service": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "desccription": "Service name"
+                        }
+                    },
+                    "required": ["name"],
+                    "example": {
+                        "name": "A Great Service"
+                    }
+                },
+                "Order": {
+                    "type": "object",
+                    "properties": {
+                        "message": {
+                            "type": "string",
+                            "desccription": "A description or message to technician"
+                        },
+                        "serviceId": {
+                            "type": "number",
+                            "desccription": "A valid service id from database"
+                        }
+                    },
+                    "required": ["message", "serviceId"],
+                    "example": {
+                        "name": "I really need your services!",
+                        "serviceId": 77
+                    }
+                }
+            }
+        }
+    },
+    "apis": []
+}
